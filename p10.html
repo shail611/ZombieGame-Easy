@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <link rel="stylesheet" href="p10.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+  <style>
+
+</style>
+<script>
+var myModule = angular.module("myApp", []);
+
+myModule.controller("cont",['$scope','$timeout', function($scope,$timeout){
+
+
+$scope.counter = 10;
+var stopped;
+var stop2;
+
+$scope.countdown = function() {
+   stopped = $timeout(function() {
+      console.log($scope.counter);
+    $scope.counter--;
+    $scope.countdown();
+  }, 1000);
+
+   if($scope.counter==0){
+     document.getElementById('hall').style.display="none";
+     document.getElementById('room').style.display="none";
+     document.getElementById('icu').style.display="none";
+     document.getElementById('cabin').style.display="none";
+     document.getElementById('gotbat').style.display="none";
+     document.getElementById('gotbow').style.display="none";
+     document.getElementById('gotkey').style.display="none";
+     document.getElementById('gotfork').style.display="none";
+     document.getElementById('gothelmet').style.display="none";
+     document.getElementById('gameover').style.display="none";
+     document.getElementById('brains').style.display="";
+     $timeout.cancel(stopped);
+   }
+   if(document.getElementById('ready').style.display==""){
+     $timeout.cancel(stopped);
+   }
+   if(document.getElementById('finish').style.display==""){
+     $timeout.cancel(stopped);
+   }
+
+
+ };
+
+ $scope.death = function(n) {
+   $scope.deathCounter=n;
+    stop2 = $timeout(function() {
+       console.log($scope.deathCounter);
+     $scope.deathCounter--;
+     $scope.death(n-1);
+   }, 1000);
+
+   if(document.getElementById('z1').style.display=="none"&&document.getElementById('z2').style.display=="none"&&document.getElementById('z3').style.display=="none"&&document.getElementById('z4').style.display=="none"&&document.getElementById('z5').style.display=="none"){
+     $timeout.cancel(stop2);
+   }
+    if($scope.deathCounter==0){
+      $timeout.cancel(stop2);
+      document.getElementById('gameover').style.display="none";
+      document.getElementById('brains').style.display="";
+    }
+
+  };
+
+}]);
+
+</script>
+<script>
+var from="";
+window.addEventListener('load',()=>{
+  pclick();
+  document.getElementById('start').style.display="none";
+  document.getElementById('maindoor').style.display="none";
+  document.getElementById('hall').style.display="none";
+  document.getElementById('gameover').style.display="none";
+  document.getElementById('gotbat').style.display="none";
+  document.getElementById('gotbow').style.display="none";
+  document.getElementById('gotkey').style.display="none";
+  document.getElementById('gotfork').style.display="none";
+  document.getElementById('gothelmet').style.display="none";
+  document.getElementById('room').style.display="none";
+  document.getElementById('cabin').style.display="none";
+  document.getElementById('icu').style.display="none";
+  document.getElementById('finish').style.display="none";
+  document.getElementById('ready').style.display="none";
+  document.getElementById('brains').style.display="none";
+  document.getElementById('newkey').style.display="none";
+})
+function checkBat(){
+  if(document.getElementById('gotbat').style.display=="none"){
+    alert("You do not have a bat to break the door. Use other doors.");
+  }
+  else{
+    document.getElementById('key').style.display="none";
+    document.getElementById('gotbat').style.display="none";
+    document.getElementById('gotkey').style.display="";
+  }
+}
+function hel(){
+  if(document.getElementById('gotfork').style.display=="none"){
+    document.getElementById('gothelmet').style.display="";
+    document.getElementById('helmet').style.display="none";
+  }
+  else{
+    document.getElementById('ready').style.display="";
+    document.getElementById('cabin').style.display="none";
+    document.getElementById('gotfork').style.display="none";
+    document.getElementById('gothelmet').style.display="none";
+  }
+}
+function fork(){
+  if(document.getElementById('gothelmet').style.display=="none"){
+    document.getElementById('gotfork').style.display="";
+    document.getElementById('fork').style.display="none";
+
+  }
+  else{
+    document.getElementById('ready').style.display="";
+    document.getElementById('cabin').style.display="none";
+    document.getElementById('gotfork').style.display="none";
+    document.getElementById('gothelmet').style.display="none";
+    document.getElementById('gotkey').style.display="none";
+    document.getElementById('gotbow').style.display="none";
+  }
+}
+
+function activateZombies(){
+  document.getElementById('z1').style.display="";
+  document.getElementById('z3').style.display="";
+}
+function finishZombie(n){
+
+  if(document.getElementById('z1').style.display=="none"&&document.getElementById('z2').style.display=="none"&&document.getElementById('z3').style.display=="none"&&document.getElementById('z4').style.display=="none"&&document.getElementById('z5').style.display=="none"){
+    document.getElementById('gameover').style.display="none";
+    if(from=="fromHall"){
+      check(3);
+    }
+    else if(from=="fromRoom"){
+      check(5);
+    }
+  }
+
+}
+function checkBox(){
+  if (document.getElementById('gotkey').style.display==""){
+    document.getElementById('boxopen').style.display='';
+    document.getElementById('inj').style.display='';
+    document.getElementById('gotkey').style.display='none';
+    document.getElementById('boxclosed').style.display='none';
+  }
+  else{
+    alert("You don't have key. Find KEY first");
+  }
+
+}
+function check(n){
+  if(n==1){
+    document.getElementById('maindoor').style.display="none";
+    document.getElementById('hall').style.display="";
+    document.getElementById('gameover').style.display="none";
+    hclick();
+    from="fromHall";
+  }
+  else if(n==2){
+    document.getElementById('gameover').style.display="";
+    document.getElementById('hall').style.display="none";
+    document.getElementById('room').style.display="none";
+
+    document.getElementById('z1').style.display="none";
+    document.getElementById('z2').style.display="none";
+    document.getElementById('z3').style.display="none";
+    document.getElementById('z4').style.display="none";
+    document.getElementById('z5').style.display="none";
+    activateZombies(from);
+  }
+  else if(n==3){
+    document.getElementById('room').style.display="";
+    document.getElementById('hall').style.display="none";
+    document.getElementById('gameover').style.display=="none";
+    rclick();
+    from="fromRoom";
+  }
+  else if(n==4){
+    if(document.getElementById('key').style.display==""){
+      alert("Obtain the key first");
+    }
+    else{
+      document.getElementById('icu').style.display="";
+      document.getElementById('boxopen').style.display="none";
+      document.getElementById('inj').style.display="none";
+      document.getElementById('room').style.display="none";
+      iclick();
+    }
+
+  }
+  else if(n==5){
+    document.getElementById('cabin').style.display="";
+    document.getElementById('room').style.display="none";
+    cclick();
+  }
+  else if(n==6){
+    document.getElementById('icu').style.display="";
+    document.getElementById('boxopen').style.display="none";
+    document.getElementById('inj').style.display="none";
+    document.getElementById('ready').style.display="none";
+    document.getElementById('newkey').style.display="";
+    i2click();
+  }
+}
+</script>
+  <body ng-app="myApp" ng-controller="cont" style="background-image:url(https://i.pinimg.com/originals/6e/8e/ff/6e8efff96738d8ac28f6b939c2380877.jpg)">
+    <div id="begin" style="display:inline-block;" align="center">
+      <img src="https://images7.alphacoders.com/565/thumb-1920-565053.jpg" width=100% height=80% alt="">
+    </div>
+    <div id="start" style="display:inline-block;" align="center">
+      <header>
+        <img onclick="document.getElementById('start').style.display='none';document.getElementById('maindoor').style.display='';bclick();" src="https://thumbs.dreamstime.com/b/lets-get-started-let-s-get-started-text-old-torn-paper-black-background-150692906.jpg" style="height:50px ;width:300px ;left:60%" alt="">
+      </header>
+      <img src="https://i.pinimg.com/originals/8c/1d/7b/8c1d7bc1fa5230eecd17f345026ee5c2.gif" width=80% height=80% alt="">
+      <br><br>
+
+    </div>
+    <div id="maindoor" style="display:inline;float:left">
+    <img class="img" onclick="alert('Wrong move.')" src="http://1.bp.blogspot.com/_-0IEi73P8ck/TKPs3XpuaqI/AAAAAAAAGc8/e_A1_eLXyg4/s1600/IMG_6430.JPG" alt="maindoor" >
+    <button class="btn" style="height:330px;width:290px;top:52%;"  ng-click="countdown()"onclick="check(1)"></button>
+    <div class="pro" style="float:right;color:red"></div>
+    </div>
+
+
+    <div id="hall" >
+  <img class="img" onclick="alert('Wrong Move...')" src="https://images.squarespace-cdn.com/content/v1/552c7c30e4b0e4f3eee4cfba/1558968846156-P732F92XTQKV5E37Z8N0/ke17ZwdGBToddI8pDm48kLkXF2pIyv_F2eUT9F60jBl7gQa3H78H3Y0txjaiv_0fDoOvxcdMmMKkDsyUqMSsMWxHk725yiiHCCLfrh8O1z4YTzHvnKhyp6Da-NYroOW3ZGjoBKy3azqku80C789l0iyqMbMesKd95J-X4EagrgU9L3Sa3U8cogeb0tjXbfawd0urKshkc5MgdBeJmALQKw/DSC_3816.jpg" alt="Snow" >
+  <button class="btn" ng-click="death(15)" onclick="wclick()"></button>
+  <button class="btn2" onclick="check(3)"></button>
+  <img class="dan" src="https://image.freepik.com/free-vector/warning-sign-danger-zombie-area_150500-87.jpg" alt="">
+  <!--<img class="that" onclick="alert('jijij')" src="https://www.freeiconspng.com/thumbs/white-arrow-png/white-arrow-transparent-png-10.png" alt="">
+  -->
+  <img class="bat" id="bat" onclick="document.getElementById('bat').style.display='none';document.getElementById('gotbat').style.display=''" src="http://assets.stickpng.com/images/5863b6db7d90850fc3ce2932.png" alt="">
+  <img class="bow" id="bow" onclick="document.getElementById('bow').style.display='none';document.getElementById('gotbow').style.display=''" src="https://lh3.googleusercontent.com/proxy/jzMi3QlGln-XvsDO0TFjfL-g61DglXvC3HwlbR3f2t84s2_2mp3mz_4LBRQKCrhIX6_fwai6A-rOiBZlKvjt5BujdJZ76W67m-mUiI78QTM5Rzm_yHC-uR-i_kJ1tgESQsfIsqh7IQKaTg" alt="">
+  <div class="pro" style="float:right;color:red">
+  <div class="timer" >
+     Time left: <br>{{counter}}
+  </div>
+  </div>
+
+</div>
+
+
+
+<div id="room" >
+<img class="img" onclick="alert('Wrong Move...')" src="https://static.zingyhomes.com/projectImages/cache/c1/14/c11426968eb186d93107b865ebd87b3c.jpg" alt="Snow" >
+
+<img class="dan2" src="https://image.freepik.com/free-vector/warning-sign-danger-zombie-area_150500-87.jpg" alt="">
+<button class="btn3" ng-click="death(14)" onclick="wclick()"></button>
+<button class="btn4" onclick="check(4)"></button>
+<button class="btn5" onclick="check(5)"></button>
+<img class="key" id="key" onclick="checkBat()" src="https://www.pngkey.com/png/full/303-3030903_key-transparent-background-gold-key.png" height="10%" width="10%" alt="">
+<div class="pro" style="float:right;color:red">
+<div class="timer" >
+   Time left: <br>{{counter}}
+</div></div>
+
+</div>
+
+<div id="icu" >
+<img class="img" onclick="alert('Wrong Move...')" src="icu.jfif"  alt="Snow" >
+<img class="boxc" id="boxclosed" onclick="checkBox()" src="https://lh3.googleusercontent.com/proxy/IPaCIKIniIJLLdzoVtxgve55_G5ACkTkgKm8_Mlls0yLQ7S-vRClkI3Ne9elU0HTHzuPfIIfMA4PmUybf0WM7PaJ8oLDEmw87P8xg07MocuRqNdLo1TtQG79wIooEwl4qrPhRzs" height="10%" width="10%" alt="">
+<img class="boxc" id="boxopen" onclick="" src="openb.png" alt="Snow" >
+<img class="inj" id="inj" onclick="eclick();" src="serum.png" alt="">
+<img class="key" id="newkey" onclick="document.getElementById('newkey').style.display='none';document.getElementById('gotkey').style.display='';" src="https://www.pngkey.com/png/full/303-3030903_key-transparent-background-gold-key.png" height="10%" width="10%" alt="">
+
+<div class="pro" style="float:right;color:red">
+<div class="timer" >
+   Time left: <br>{{counter}}
+</div></div>
+</div>
+
+
+<div id="cabin" >
+<img class="img" onclick="alert('Wrong Move...')" src="cabin.jpg" style="height:650px" alt="Snow" >
+
+<img class="fork" id="fork" onclick="fork()"src="https://images.vexels.com/media/users/3/190928/isolated/preview/ac6137880644586a677485394894b3f0-farm-fork-icon-by-vexels.png" alt="">
+<img class="helmet" id="helmet" onclick="hel()"src="helmet.png" alt="">
+<div class="pro" style="float:right;color:red">
+<div class="timer" >
+   Time left: <br>{{counter}}
+</div></div>
+</div>
+</div>
+
+<div id="gameover" align="center">
+  <header style="font-weight:bold;font-size:20px;background-color:white;color:red">
+    Kill 5 Zombies before {{deathCounter}} seconds to prevent getting killed.
+  </header>
+  <img class="img" src="https://i.pinimg.com/originals/fd/6d/66/fd6d6616ae4563bfee2db1882b8da185.jpg" style="height:740px;width:1480px;" alt="">
+  <img class="z1" id="z1" onclick="document.getElementById('z2').style.display='';document.getElementById('z1').style.display='none';" src="https://lh3.googleusercontent.com/proxy/L1m3loV79Ju8pqqDsc-d21r8dsESPpo9_w718V37nrZnBGVnPXctGF70HamwZOeBhAm0JAwr9arapjF6Baufu96nl8i8p9FOJ8pGqMuYNWuis8zv" alt="">
+  <img class="z2" id="z2" onclick="document.getElementById('z2').style.display='none';finishZombie('fromHall')" src="https://www.freeiconspng.com/thumbs/zombie/standing-zombie-clip-art-resident-evil-4-18.png" alt="">
+  <img class="z3" id="z3" onclick="document.getElementById('z4').style.display='';document.getElementById('z3').style.display='none';" src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c2c0.png" alt="">
+  <img class="z4" id="z4" onclick="document.getElementById('z5').style.display='';document.getElementById('z4').style.display='none';finishZombie('fromHall')" src="https://lh3.googleusercontent.com/proxy/L1m3loV79Ju8pqqDsc-d21r8dsESPpo9_w718V37nrZnBGVnPXctGF70HamwZOeBhAm0JAwr9arapjF6Baufu96nl8i8p9FOJ8pGqMuYNWuis8zv" alt="">
+  <img class="z5" id="z5" onclick="document.getElementById('z5').style.display='none';finishZombie('fromHall')" src="http://assets.stickpng.com/images/580b57fcd9996e24bc43c2c0.png" alt="">
+
+
+</div>
+<div id="brains" align="center">
+<img src="https://www.videogamesblogger.com/wp-content/uploads/2012/10/resident-evil-6-you-are-dead-screen.jpg" style="height:740px;width:1280px;align:center" alt="">
+<img onclick="location.reload()" src="https://thumbs.dreamstime.com/b/red-pixel-retro-play-again-button-video-games-navigation-web-design-yellow-background-square-vector-icon-141866214.jpg" height="10%" width="10%" alt="">
+
+</div>
+<div id="gotkey" style="display:inline-block;overflow:hidden">
+  <img src="https://www.pngkey.com/png/full/303-3030903_key-transparent-background-gold-key.png" style="width:10%;height:10%" alt="">
+</div>
+<div id="gotfork" style="display:inline-block;overflow:hidden">
+  <img src="https://images.vexels.com/media/users/3/190928/isolated/preview/ac6137880644586a677485394894b3f0-farm-fork-icon-by-vexels.png" style="width:10%;height:10%" alt="">
+</div>
+<div id="gothelmet" style="display:inline-block;overflow:hidden">
+  <img src="helmet.png" style="width:10%;height:10%" alt="">
+</div>
+<div id="gotbat" style="display:inline-block;overflow:hidden">
+  <img src="http://assets.stickpng.com/images/5863b6db7d90850fc3ce2932.png" style="width:10%;height:10%" alt="">
+</div>
+<div id="gotbow" style="display:inline-block;overflow:hidden">
+  <img src="https://lh3.googleusercontent.com/proxy/jzMi3QlGln-XvsDO0TFjfL-g61DglXvC3HwlbR3f2t84s2_2mp3mz_4LBRQKCrhIX6_fwai6A-rOiBZlKvjt5BujdJZ76W67m-mUiI78QTM5Rzm_yHC-uR-i_kJ1tgESQsfIsqh7IQKaTg" style="height:10%;width:10%" alt="">
+</div>
+<div id="finish" align="center">
+  <img src="https://media.vanityfair.com/photos/5bdcac4e588fbb722a76a43a/master/w_1600%2Cc_limit/twd-ride-atlanta.gif" height="80%" width="80%" alt="">
+  <br><br>
+  <img onclick="location.reload()" src="https://thumbs.dreamstime.com/b/red-pixel-retro-play-again-button-video-games-navigation-web-design-yellow-background-square-vector-icon-141866214.jpg" height="10%" width="10%" alt="">
+</div>
+<div id="ready" align="center">
+  <img src="https://media1.giphy.com/media/iGYOGCpSP9KILdmDVq/giphy.gif" width="70%" height="70%" alt=""> <br>
+  <img src="https://t4.ftcdn.net/jpg/03/15/91/05/360_F_315910595_ak6TXkbTHSMV8pQbWbyjplvksZgzqmnH.jpg" onclick="check(6)" height="10%" width="10%" alt="">
+</div>
+
+<!-- The Modal -->
+
+<div id="preview" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content-ex">
+    <div class="modal-header-ex">
+      <span id="close0" class="close">×</span>
+      <h2>Serum Extraction</h2>
+    </div>
+    <div class="modal-body">
+      <h3 align="center">Disclaimer</h3>
+      <p>World is going towards it's end. Flesh-eating Zombies have captured entire civilizations</p>
+      <p>You have been infected by a Zombie bite in an ongoing Zombie-Apocalypse.</p>
+      <p>You have found an abandoned Hospital.
+      Your job is to search through entire hospital to find the Storage unit where a vaccine is present to cure you.</p>
+      <p>You are also at risk from more zombie attacks so choose your path accordingly.</p>
+      <p>You will also get necassory helps from Daryl.</p>
+      <p>Don't know who Daryl is? Let's get started then. This is going to be a hell of a ride.</p>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="intro" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close1" class="close">×</span>
+      <h2>Serum Extraction</h2>
+    </div>
+    <div class="modal-body">
+      <p>Hi, I'm Daryl.</p>
+      <p>I'll be guiding you through your journey to find the Serum. I'll tell you what to do on each and every step. Trust me and we'll be safe.</p>
+      <p>First off, let's get into the Hospital</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="hall1" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close2" class="close">×</span>
+      <h2>Hallways</h2>
+    </div>
+    <div class="modal-body">
+      <p>You are at the hall of the Hospital.</p>
+      <p><ul>
+        <li>Look through doors to find destination</li>
+        <li>Entering a door with Danger sign can become a trouble.</li>
+        <li>Keep collecting necassory weapons</li>
+        <li>Keep one eye at the timer. If the timer goes off Zombies will have your brains.</li>
+        <li>Choose your paths wisely because Zombies have become fast and you won't be able to go back.</li>
+      </ul>
+    </p>
+
+    </div>
+
+  </div>
+</div>
+
+<div id="warning" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header-warning">
+      <span id="close3" class="close">×</span>
+      <h2>Warning</h2>
+    </div>
+    <div class="modal-body">
+      <p>You have chosen a dangerous room to enter.</p>
+      <p>There are many zombies inside the room and they can now sense you.</p>
+      <p>Kill as many Zombies as you can before they kill you.</p>
+    </div>
+
+  </div>
+</div>
+<div id="roomInfo" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close4" class="close">×</span>
+      <h2>3 Doors</h2>
+    </div>
+    <div class="modal-body">
+      <p>Well done !!!</p>
+      <p>It has come to known that the Serum you are looking for is in a safe and it's key is somewhere lying around.</p>
+        <p>Search for the key and enter that room.</p>
+      <p>P.S.: I hope you took the required weapons from the Hallways to break in the door.</p>
+    </div>
+
+  </div>
+</div>
+<div id="icuInfoWithKey" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close5" class="close">×</span>
+      <h2>Final Room</h2>
+    </div>
+    <div class="modal-body">
+      <p>Bravo !!!</p>
+      <p>You managed to reach the final room. Now all you have to do is find a safe which can be unlocked by the key you have obtained.</p>
+        <p>You will find the Serum present in it.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="icuInfoWithoutKey" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close6" class="close">×</span>
+      <h2>Final Room</h2>
+    </div>
+    <div class="modal-body">
+      <p>Bravo !!!</p>
+      <p>You managed to reach the final room. But you have still not found the key to safe. Find the key and a safe to open the key with.</p>
+        <p>You will find the Serum present in it.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="cabinInfo" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close7" class="close">×</span>
+      <h2>Cabin of Luck</h2>
+    </div>
+    <div class="modal-body">
+      <p>Tough Luck !!!</p>
+      <p>Not obtaining the key has cost you a detour from reaching the final room where the Serum is kept.</p>
+        <p>But don't worry, I am always with you.</p>
+        <p>Grab protective stuffs like a helmet and a fork. Both of these will be useful in future. And let's keep moving.</p>
+    </div>
+
+  </div>
+</div>
+
+<div id="end" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <div class="modal-header">
+      <span id="close8" class="close">×</span>
+      <h2>End</h2>
+    </div>
+    <div class="modal-body">
+      <p>Congratulations!!!</p>
+      <p>You found the Serum and now you are saved from the Zombies.</p>
+      <p>But for how long?</p>
+    </div>
+
+  </div>
+</div>
+  </body>
+
+  <script>
+var modal0 = document.getElementById('preview');
+var c0 = document.getElementById("close0");
+var modal1 = document.getElementById('intro');
+var c1 = document.getElementById("close1");
+var modal2 = document.getElementById('hall1');
+var c2 = document.getElementById("close2");
+var modal3 = document.getElementById('warning');
+var c3 = document.getElementById("close3");
+var modal4 = document.getElementById('roomInfo');
+var c4 = document.getElementById("close4");
+var modal5 = document.getElementById('icuInfoWithKey');
+var c5 = document.getElementById("close5");
+var modal6 = document.getElementById('icuInfoWithoutKey');
+var c6 = document.getElementById("close6");
+var modal7 = document.getElementById('cabinInfo');
+var c7 = document.getElementById("close7");
+var modal8 = document.getElementById('end');
+var c8 = document.getElementById("close8");
+function pclick() {
+    modal0.style.display = "block";
+}
+function bclick() {
+    modal1.style.display = "block";
+}
+function hclick() {
+    modal2.style.display = "block";
+}
+function wclick() {
+    modal3.style.display="block";
+}
+function rclick() {
+    modal4.style.display="block";
+}
+function iclick() {
+    modal5.style.display="block";
+}
+function i2click() {
+    modal6.style.display="block";
+}
+function cclick() {
+    modal7.style.display="block";
+}
+function eclick() {
+    modal8.style.display="block";
+}
+c0.onclick = function() {
+      modal0.style.display = "none";
+      document.getElementById('begin').style.display='none';
+      document.getElementById('start').style.display='';
+}
+c1.onclick = function() {
+      modal1.style.display = "none";
+}
+c2.onclick=function(){
+  modal2.style.display="none";
+}
+c3.onclick=function(){
+  modal3.style.display="none";
+  check(2);
+}
+c4.onclick=function(){
+  modal4.style.display="none";
+}
+c5.onclick=function(){
+  modal5.style.display="none";
+}
+c6.onclick=function(){
+  modal6.style.display="none";
+}
+c7.onclick=function(){
+  modal7.style.display="none";
+}
+c8.onclick=function(){
+  modal8.style.display="none";
+  document.getElementById('icu').style.display='none';
+  document.getElementById('finish').style.display='';
+  document.getElementById('gotbow').style.display='none';
+  document.getElementById('gotbat').style.display='none';
+
+}
+window.onclick = function(event) {
+    if (event.target == modal1) {
+        modal1.style.display = "none";
+    }
+}
+</script>
+</html>
